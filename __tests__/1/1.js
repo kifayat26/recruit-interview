@@ -239,7 +239,15 @@ test("Exercise 4.2: implement filter function", () => {
 });
 
 // implement reduce
-const reduce = (array, func, initalValue) => {};
+const reduce = (arr, func, initalValue) => {
+  let accumulator = initalValue === undefined ? 0 : initalValue;
+
+  for(let i=0; i<arr.length; i++) {
+    accumulator = func(accumulator, arr[i], i, arr);
+  }
+
+  return accumulator;
+};
 
 test("Exercise 4.3: implement reduce function", () => {
   const r1 = [Math.random(), Math.random(), Math.random(), Math.random()];
