@@ -127,7 +127,19 @@ test("Example 3: given a person, return total balance of her subordinates", () =
 });
 
 // given a person, return average age of her subordinates
-const exercise31 = (person) => {};
+const exercise31 = (person) => {
+  let totalAge = 0.0;
+  let result;
+  const length = parseFloat(person.subordinates.length);
+
+  person.subordinates.forEach(element => {
+    totalAge = totalAge + element.age;
+  });
+  
+  result = totalAge/length;
+
+  return result;
+};
 
 test("Exercise 3.1: given a person, return average age of her subordinates", () => {
   expect(exercise31(CruzHarrell)).toBeCloseTo(50.2);
