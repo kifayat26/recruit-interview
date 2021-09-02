@@ -293,7 +293,8 @@ const getEyeColorMatch = (data, color) => {
   });
 
   return result;
-}
+};
+
 const exercise51 = (color) => {
   let result = getEyeColorMatch(CruzHarrell.subordinates, color);
   result = result + (CruzHarrell.eyeColor == color ? 1:0);
@@ -319,7 +320,20 @@ test("distance: given two locations, return the distance between them", () => {
 });
 
 // given maxDistance, return number of employees who lives within maxDistance distance of their managers
-const exercise52 = (maxDistance) => {};
+const maxDistanceLocator = (person, maxDistance) => {
+  let result = 0;
+  person.subordinates.forEach((element) => {
+    const dist = distance(person.location, element.location);
+    result = result + maxDistanceLocator(element, maxDistance) + (dist <= maxDistance ? 1:0);
+  });
+
+  return result;
+};
+
+const exercise52 = (maxDistance) => {
+  const result = maxDistanceLocator(CruzHarrell, maxDistance);
+  return result;
+};
 
 test("Exercise 5.2: given maxDistance, return number of employees who lives within maxDistance distance of their managers", () => {
   expect(exercise52(5)).toEqual(25);
