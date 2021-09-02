@@ -148,7 +148,20 @@ test("Exercise 3.1: given a person, return average age of her subordinates", () 
 
 // given a person, return difference between female and male subordinates
 // e.g: if someone has 4 female subordinates and 7 male subordinates, return -3(=4-7)
-const exercise32 = (person) => {};
+const exercise32 = (person) => {
+  let result = 0;
+
+  person.subordinates.forEach(element => {
+    if(element.gender == "male") {
+      result = result - 1;
+    }
+    else if(element.gender == "female") {
+      result = result + 1;
+    }
+  });
+
+  return result;
+};
 
 test("Exercise 3.2: given a person, return difference between female and male subordinates", () => {
   expect(exercise32(CruzHarrell)).toEqual(2);
