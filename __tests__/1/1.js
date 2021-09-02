@@ -169,7 +169,13 @@ test("Exercise 3.2: given a person, return difference between female and male su
 });
 
 // do the same exercise32, but with using only 1 reduce function and nothing else
-const exercise32a = (person) => {};
+const exercise32a = (person) => {
+  const result = person.subordinates.reduce((previousVal, current) =>{
+    return current.gender == "female" ? previousVal+1 : previousVal-1 ;
+  }, 0);
+
+  return result;
+};
 
 test("Exercise 3.2a: given a person, return difference between female and male subordinates", () => {
   expect(exercise32a(CruzHarrell)).toEqual(2);
