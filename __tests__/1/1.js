@@ -93,7 +93,11 @@ test("Exercise 2.1: given a person and [minAge, maxAge], return number of subord
 });
 
 // given a person, return the names of subordinates who themselves have subordinates
-const exercise22 = (person) => {};
+const exercise22 = (person) => {
+  const subordinatesWithSubordinates = person.subordinates.filter((subordinate) => subordinate.subordinates.length );
+  const result = subordinatesWithSubordinates.map((subordinate) => subordinate.name);
+  return result;
+};
 
 test("Exercise 2.2: given a person, return the names of subordinates who themselves have subordinates", () => {
   expect(exercise22(CruzHarrell)).toEqual([
