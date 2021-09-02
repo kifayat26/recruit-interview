@@ -37,7 +37,14 @@ test("Exercise 1.1: return company name from email address", () => {
 });
 
 // given a person, return list of companies of her subordinates
-const exercise12 = (person) => {};
+const exercise12 = (person) => {
+  const companyList = person.subordinates.map((subordinate) => exercise11(subordinate.email));
+
+  const uniqueCompanyList = new Set(companyList);
+  const result = [...uniqueCompanyList];
+
+  return result;
+};
 
 test("Exercise 1.2: given a person, return list of companies of her subordinates", () => {
   expect(exercise12(CruzHarrell)).toEqual([
