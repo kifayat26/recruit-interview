@@ -79,8 +79,8 @@ const exercise21 = (person, [minAge, maxAge]) => {
   let result = 0;
 
   person.subordinates.forEach(element => {
-    if(element.age>= minAge && element.age<=maxAge) {
-      result = result+1;
+    if(element.age >= minAge && element.age <= maxAge) {
+      result = result + 1;
     }
   });
 
@@ -94,9 +94,11 @@ test("Exercise 2.1: given a person and [minAge, maxAge], return number of subord
 
 // given a person, return the names of subordinates who themselves have subordinates
 const exercise22 = (person) => {
-  const subordinatesWithSubordinates = person.subordinates.filter((subordinate) => subordinate.subordinates.length );
-  const result = subordinatesWithSubordinates.map((subordinate) => subordinate.name);
-  return result;
+  const subordinatesWithSubordinates = person.subordinates
+  .filter((subordinate) => subordinate.subordinates.length)
+  .map((subordinate) => subordinate.name);
+  
+  return subordinatesWithSubordinates;
 };
 
 test("Exercise 2.2: given a person, return the names of subordinates who themselves have subordinates", () => {
@@ -136,7 +138,7 @@ const exercise31 = (person) => {
     totalAge = totalAge + element.age;
   });
   
-  result = totalAge/length;
+  result = totalAge / length;
 
   return result;
 };
@@ -152,10 +154,10 @@ const exercise32 = (person) => {
   let result = 0;
 
   person.subordinates.forEach(element => {
-    if(element.gender == "male") {
+    if(element.gender === "male") {
       result = result - 1;
     }
-    else if(element.gender == "female") {
+    else if(element.gender === "female") {
       result = result + 1;
     }
   });
@@ -171,7 +173,7 @@ test("Exercise 3.2: given a person, return difference between female and male su
 // do the same exercise32, but with using only 1 reduce function and nothing else
 const exercise32a = (person) => {
   const result = person.subordinates.reduce((previousVal, current) =>{
-    return current.gender == "female" ? previousVal+1 : previousVal-1 ;
+    return current.gender === "female" ? previousVal + 1 : previousVal - 1 ;
   }, 0);
 
   return result;
@@ -192,7 +194,7 @@ test("Exercise 3.2a: given a person, return difference between female and male s
 const map = (arr, func) => {
   let result = [];
 
-  for(let index=0; index<arr.length; index++) {
+  for( let index = 0; index < arr.length; index++ ) {
     const element = arr[index];
     const ans = func(element, index, arr);
     result.push(ans); 
@@ -213,7 +215,7 @@ test("Exercise 4.1: implement map function", () => {
 const filter = (arr, func) => {
   let result = [];
 
-  for(let index=0; index<arr.length; index++) {
+  for( let index = 0; index < arr.length; index++ ) {
     const element = arr[index];
     if(func(element, index)) {
       result.push(element);
@@ -242,8 +244,8 @@ test("Exercise 4.2: implement filter function", () => {
 const reduce = (arr, func, initalValue) => {
   let accumulator = initalValue === undefined ? 0 : initalValue;
 
-  for(let i=0; i<arr.length; i++) {
-    accumulator = func(accumulator, arr[i], i, arr);
+  for( let index = 0; index < arr.length; index++ ) {
+    accumulator = func(accumulator, arr[index], index, arr);
   }
 
   return accumulator;
@@ -297,7 +299,7 @@ const getEyeColorMatch = (data, color) => {
 
 const exercise51 = (color) => {
   let result = getEyeColorMatch(CruzHarrell.subordinates, color);
-  result = result + (CruzHarrell.eyeColor == color ? 1:0);
+  result = result + ( CruzHarrell.eyeColor === color ? 1 : 0 );
   return result;
 };
 
@@ -324,7 +326,7 @@ const maxDistanceLocator = (person, maxDistance) => {
   let result = 0;
   person.subordinates.forEach((element) => {
     const dist = distance(person.location, element.location);
-    result = result + maxDistanceLocator(element, maxDistance) + (dist <= maxDistance ? 1:0);
+    result = result + maxDistanceLocator(element, maxDistance) + (dist <= maxDistance ? 1 : 0 );
   });
 
   return result;
