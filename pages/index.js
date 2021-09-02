@@ -84,10 +84,10 @@ const Snake = () => {
       setSnake((snake) => {
         const head = snake[0];
         const newHead = { x: head.x + direction.x, y: head.y + direction.y };
-
+        const modifiedHead = pushedIntoBoundary(newHead);
         // make a new snake by extending head
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
-        const newSnake = [newHead, ...snake];
+        const newSnake = [modifiedHead, ...snake];
 
         // remove tail
         newSnake.pop();
@@ -152,6 +152,24 @@ const Snake = () => {
 
   // ?. is called optional chaining
   // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+  const pushedIntoBoundary = ({ x, y }) => {
+    if(x < 0) {
+      x = Config.width - 1;
+    }
+    else if (x >= Config.width) {
+      x = 0;
+    }
+    
+    if(y < 0) {
+      y = Config.height - 1;
+    }
+    else if (y >= Config.height) {
+      y = 0;
+    }
+
+    return { x, y };
+  };
+
   const isFood = ({ x, y }) => food?.x === x && food?.y === y;
 
   const isSnake = ({ x, y }) =>
