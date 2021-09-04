@@ -135,23 +135,35 @@ const Snake = () => {
 
   useEffect(() => {
     const handleNavigation = (event) => {
-      switch (event.key) {
-        case "ArrowUp":
-          setDirection(Direction.Top);
-          break;
-
-        case "ArrowDown":
-          setDirection(Direction.Bottom);
-          break;
-
-        case "ArrowLeft":
-          setDirection(Direction.Left);
-          break;
-
-        case "ArrowRight":
-          setDirection(Direction.Right);
-          break;
-      }
+      setDirection(previous => {
+        let direction = previous;
+        switch (event.key) {
+          case "ArrowUp":
+            if(!isSameDirection(Direction.Bottom, previous)) {
+              direction = Direction.Top;
+            }
+              break;
+  
+          case "ArrowDown":
+            if(!isSameDirection(Direction.Top, previous)) {
+              direction =  Direction.Bottom;
+            }
+            break;
+  
+          case "ArrowLeft":
+            if(!isSameDirection(Direction.Right, previous)) {
+              direction =  Direction.Left;
+            }
+            break;
+  
+          case "ArrowRight":
+            if(!isSameDirection(Direction.Left, previous)) {
+              direction =  Direction.Right;
+            }
+            break;
+        }
+        return direction;
+      });
     };
     window.addEventListener("keydown", handleNavigation);
 
@@ -182,6 +194,15 @@ const Snake = () => {
       clearInterval(deleteFood);
     }
   }, []);
+
+  const isSameDirection = (direction1, direction2) => {
+    if(direction1.x == direction2.x && direction1.y == direction2.y) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  };
 
   const getTimeDifference = (time1, time2) => {
     const difference = Math.abs(time1 - time2);
