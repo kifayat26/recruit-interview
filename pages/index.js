@@ -69,13 +69,19 @@ const Snake = () => {
     { x: 7, y: 12 },
     { x: 6, y: 12 },
   ];
+
+  const getTime = () => {
+    let date = new Date();
+    return date.getTime();
+  };
+
   const grid = useRef();
 
   // snake[0] is head and snake[snake.length - 1] is tail
   const [snake, setSnake] = useState(getDefaultSnake());
   const [direction, setDirection] = useState(Direction.Right);
 
-  const [food, setFood] = useState({ x: 4, y: 10 });
+  const [food, setFood] = useState([{ x: 4, y: 10, date: getTime() }]);
   const [score, setScore] = useState(0);
 
   // move the snake
@@ -114,12 +120,10 @@ const Snake = () => {
         return score + 1;
       });
 
-      let newFood = getRandomCell();
-      while (isSnake(newFood)) {
-        newFood = getRandomCell();
-      }
-
-      setFood(newFood);
+      const newFood = getNewFoodPosition();
+      const newFoods = food.filter(({ x, y }) => x != snake[0].x || y != snake[0].y );
+      const modifiedFoods = [newFood, ...newFoods];
+      setFood(modifiedFoods);
 
       const updatedSnake = [...snake, {
         x: head.x + (snake.length * direction.x),
@@ -150,12 +154,56 @@ const Snake = () => {
       }
     };
     window.addEventListener("keydown", handleNavigation);
-
+   
     return () => window.removeEventListener("keydown", handleNavigation);
   }, []);
 
+  useEffect(() => {
+    const createNewFood = setInterval(() => {
+      const newFood = getNewFoodPosition();
+      let newFoods = [newFood, ...food];
+      setFood(newFoods)
+    }, 3000);
+
+    return () => clearInterval(createNewFood);
+  }, [food]);
+  
+  // useEffect(() => {
+  //   const deleteFood = setInterval(() => {
+  //     const date = getTime();
+  //     const newFoods = food.filter((element) => {
+  //       return getTimeDifference(element.date, date);
+  //     });
+  //     setFood(newFoods)
+  //   }, 1000);
+
+  //   return () => clearInterval(deleteFood);
+  // }, [food]);
   // ?. is called optional chaining
   // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+
+
+  const getTimeDifference = (time1, time2) => {
+    const difference = Math.abs(time1 - time2);
+    return difference < 10000;
+  };
+
+  const isFood = ({ x, y }) =>
+    food.find((position) => position.x === x && position.y === y);
+
+  const getNewFoodPosition = () => {
+    let newFood = getRandomCell();
+    while (isSnake(newFood) || isFood(newFood)) {
+      newFood = getRandomCell();
+    }
+    const modifiedFood = {
+      x : newFood.x,
+      y : newFood.y,
+      date : getTime()
+    }
+    return modifiedFood;
+  };
+
   const hitSnakeBody = () => {
     for(let i = 1; i < snake.length; i++) {
       if(snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
@@ -182,8 +230,6 @@ const Snake = () => {
 
     return { x, y };
   };
-
-  const isFood = ({ x, y }) => food?.x === x && food?.y === y;
 
   const isSnake = ({ x, y }) =>
     snake.find((position) => position.x === x && position.y === y);
