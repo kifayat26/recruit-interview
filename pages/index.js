@@ -154,34 +154,34 @@ const Snake = () => {
       }
     };
     window.addEventListener("keydown", handleNavigation);
-   
+
     return () => window.removeEventListener("keydown", handleNavigation);
   }, []);
 
   useEffect(() => {
     const createNewFood = setInterval(() => {
-      const newFood = getNewFoodPosition();
-      let newFoods = [newFood, ...food];
-      setFood(newFoods)
+      setFood((previous) => {
+        const newFood = getNewFoodPosition();
+        let newFoods = [newFood, ...previous];
+        return newFoods;
+      })
     }, 3000);
 
-    return () => clearInterval(createNewFood);
-  }, [food]);
-  
-  // useEffect(() => {
-  //   const deleteFood = setInterval(() => {
-  //     const date = getTime();
-  //     const newFoods = food.filter((element) => {
-  //       return getTimeDifference(element.date, date);
-  //     });
-  //     setFood(newFoods)
-  //   }, 1000);
+    const deleteFood = setInterval(() => {
+      setFood((previous) => {
+        const date = getTime();
+        const newFoods = previous.filter((element) => {
+          return getTimeDifference(element.date, date);
+        });
+        return newFoods;
+      })
+    }, 1000);
 
-  //   return () => clearInterval(deleteFood);
-  // }, [food]);
-  // ?. is called optional chaining
-  // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
-
+    return () => {
+      clearInterval(createNewFood);
+      clearInterval(deleteFood);
+    }
+  }, []);
 
   const getTimeDifference = (time1, time2) => {
     const difference = Math.abs(time1 - time2);
@@ -201,6 +201,7 @@ const Snake = () => {
       y : newFood.y,
       date : getTime()
     }
+    //console.log("newfood ",modifiedFood);
     return modifiedFood;
   };
 
