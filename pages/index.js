@@ -92,6 +92,10 @@ const Snake = () => {
         // remove tail
         newSnake.pop();
 
+        if(hitSnakeBody()) {
+          setScore(0);
+          return getDefaultSnake();
+        }
         return newSnake;
       });
     };
@@ -152,6 +156,15 @@ const Snake = () => {
 
   // ?. is called optional chaining
   // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+  const hitSnakeBody = () => {
+    for(let i = 1; i < snake.length; i++) {
+      if(snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const pushedIntoBoundary = ({ x, y }) => {
     if(x < 0) {
       x = Config.width - 1;
